@@ -1,0 +1,57 @@
+#!/bin/bash
+# SailfishOS SDK Target Helper for use with Qt Creator
+# 2014-02-19 Thomas Perl <thomas.perl@jolla.com>
+
+# Source tree directory is usually the working directory
+SOURCE_TREE=$(pwd)
+
+# Directory relative to the shared home folder of the SDK
+SOURCE_RELATIVE="${SOURCE_TREE#$MER_SSH_SHARED_HOME}"
+
+# Relative path of source tree in SDK VM
+TARGET_PATH="./$SOURCE_RELATIVE"
+
+# Path of this script in the SDK VM (relative to $HOME)
+SELF_IN_TARGET="$TARGET_PATH/sdk/target"
+
+# Set this to "SailfishOS Device" or whatever target you
+# want to deploy your application to.
+DEPLOYMENT_DEVICE="SailfishOS Emulator"
+
+sdk() {
+    echo "In SDK: $@"
+    exec ssh \
+        -p "$MER_SSH_PORT" \
+        -l "$MER_SSH_USERNAME" \
+        -i "$MER_SSH_PRIVATE_KEY" \
+        localhost \
+        "sh -c '$SELF_IN_TARGET exec $@'"
+}
+
+COMMAND=$1
+shift
+
+case $COMMAND in
+    sb2)
+        # Run sb2 in the SDK with target set
+        sdk sb2 \
+            -t \""$MER_SSH_TARGET_NAME"\" \
+            "$@"
+        ;;
+    mb2)
+        # Run mb2 in the SDK with target and device set
+        sdk mb2 \
+            -t \""$MER_SSH_TARGET_NAME"\" \
+            -d \""$DEPLOYMENT_DEVICE"\" \
+            "$@"
+        ;;
+    exec)
+        # Execute inside the SDK relative to the source tree
+        cd $(dirname $0)/..
+        $COMMAND "$@"
+        ;;
+    *)
+        echo "Unknown command: $COMMAND"
+        exit 1
+        ;;
+esac

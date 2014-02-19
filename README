@@ -1,0 +1,78 @@
+SDL Application Example for use with Qt Creator
+-----------------------------------------------
+
+For now, we have to resort to setting up custom build and deploy steps, as the
+current SDK version is tightly integrated with Qt Creator and qmake. The steps
+are easy, and you can customize each step. "mb2 build" uses the configure,
+build and install steps defined in the .spec file, and also makes sure all
+build dependencies are installed properly (so list them in the .spec file).
+
+You can also use other build systems (e.g. autotools or cmake) as long as you
+state your build-dependencies correctly in the .spec file and as long as you
+add the right "configure" command to the %prep step in the .spec file.
+
+The SOURCES, HEADERS and OTHER_FILES variables in the .pro file are used to
+display the source files in the Qt Creator IDE. They are not used for building.
+
+
+Here's how you configure Qt Creator to build the project:
+
+
+1. Open the .pro file in Qt Creator
+
+
+2. Modify the project build settings:
+
+    General:
+
+        Disable the "Shadow build" setting
+
+    Build Steps:
+
+        Remove ALL steps, then add a new one:
+
+        Custom Process Step
+
+                  Command: sdk/target
+                Arguments: mb2 build
+        Working directory: %{buildDir}
+
+    Clean Steps:
+
+        Remove ALL steps, then add a new one:
+
+        Custom Process Step
+
+                  Command: sdk/target
+                Arguments: sb2 make clean
+        Working directory: %{buildDir}
+
+
+3. Modify the project run settings:
+
+    Deployment:
+
+        Remove ALL steps (except the "Start Emulator" one), then add a new one:
+
+        Custom Process Step
+
+                  Command: sdk/target
+                Arguments: mb2 deploy --pkcon
+        Working directory: %{buildDir}
+
+
+    Run:
+
+        Custom Process Step
+
+                  Command: sdk/target
+                Arguments: mb2 run /usr/bin/harbour-sdltest
+        Working directory: %{buildDir}
+
+        (if you change the application binary name, you have to customize the
+        name here; simply replace /usr/bin/harbour-sdltest with
+        /usr/bin/$APPNAME)
+
+
+4. If you want to have a target device other than "SailfishOS Emulator",
+   you need to modify the DEPLOYMENT_DEVICE variable in sdk/target.

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=SDL SDK App
+X-Nemo-Application-Type=generic
+Icon=harbour-sdltest
+Exec=harbour-sdltest
