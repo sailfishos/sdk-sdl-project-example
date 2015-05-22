@@ -41,7 +41,7 @@ SDL2TestApplication::SDL2TestApplication(int major, int minor)
 
 SDL2TestApplication::~SDL2TestApplication()
 {
-    std::list<TouchPoint*>::iterator it;
+    std::vector<TouchPoint*>::iterator it;
     for (it=m_touches.begin(); it != m_touches.end(); ++it) {
         delete *it;
     }
@@ -50,7 +50,7 @@ SDL2TestApplication::~SDL2TestApplication()
 void
 SDL2TestApplication::for_each_touch(touch_point_func f, void *user_data)
 {
-    std::list<TouchPoint*>::iterator it;
+    std::vector<TouchPoint*>::iterator it;
     for (it=m_touches.begin(); it != m_touches.end(); ++it) {
         f(*it, user_data);
     }
@@ -96,7 +96,7 @@ SDL2TestApplication::run()
     initGL();
     resizeGL(w, h);
 
-    std::list<TouchPoint*>::iterator it;
+    std::vector<TouchPoint*>::iterator it;
     TouchPoint *touch;
 
     SDL_Event event;

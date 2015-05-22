@@ -32,7 +32,7 @@
 #include <SDL.h>
 #include <stdio.h>
 
-#include <list>
+#include <vector>
 
 class TouchPoint {
     public:
@@ -65,7 +65,7 @@ class SDL2TestApplication {
         int m_minor;
         SDL_Window *m_window;
         SDL_GLContext m_gl_context;
-        std::list<TouchPoint*> m_touches;
+        std::vector<TouchPoint*> m_touches;
 };
 
 #endif /* SAILFISH_SDL_WAYLAND_OPENGL_TEST_H */
