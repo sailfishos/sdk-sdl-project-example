@@ -159,15 +159,15 @@ SDL2TestApplicationGLESv2::resizeGL(int width, int height)
 }
 
 static void
-draw_touch_point(TouchPoint *touch, void *user_data)
+draw_touch_point(const TouchPoint &touch, void *user_data)
 {
     float d = 30;
 
     float vertices[] = {
-        touch->x - d, touch->y - d,
-        touch->x + d, touch->y - d,
-        touch->x - d, touch->y + d,
-        touch->x + d, touch->y + d,
+        touch.x - d, touch.y - d,
+        touch.x + d, touch.y - d,
+        touch.x - d, touch.y + d,
+        touch.x + d, touch.y + d,
     };
 
     int vtxcoord_loc = *((int*)user_data);
