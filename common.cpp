@@ -41,16 +41,12 @@ SDL2TestApplication::SDL2TestApplication(int major, int minor)
 
 SDL2TestApplication::~SDL2TestApplication()
 {
-    std::list<TouchPoint*>::iterator it;
-    for (it=m_touches.begin(); it != m_touches.end(); ++it) {
-        delete *it;
-    }
 }
 
 void
 SDL2TestApplication::for_each_touch(touch_point_func f, void *user_data)
 {
-    std::list<TouchPoint*>::iterator it;
+    std::vector<TouchPoint>::iterator it;
     for (it=m_touches.begin(); it != m_touches.end(); ++it) {
         f(*it, user_data);
     }
@@ -96,8 +92,7 @@ SDL2TestApplication::run()
     initGL();
     resizeGL(w, h);
 
-    std::list<TouchPoint*>::iterator it;
-    TouchPoint *touch;
+    std::vector<TouchPoint>::iterator it;
 
     SDL_Event event;
     int quit = 0;
@@ -111,24 +106,24 @@ SDL2TestApplication::run()
                     printf("Window event: %d (%d, %d)\n", event.window.event,
                             event.window.data1, event.window.data2);
                     break;
-                case SDL_FINGERDOWN:
-                    touch = new TouchPoint(event.tfinger.fingerId,
+                case SDL_FINGERDOWN: {
+                    TouchPoint touch(event.tfinger.fingerId,
                             event.tfinger.x, event.tfinger.y);
                     m_touches.push_back(touch);
                     onPressed(touch);
-                    printf("Finger down: (%.2f, %.2f)\n", touch->x, touch->y);
+                    printf("Finger down: (%.2f, %.2f)\n", touch.x, touch.y);
                     break;
+                }
                 case SDL_FINGERUP:
                 case SDL_FINGERMOTION:
                     for (it=m_touches.begin(); it != m_touches.end(); ++it) {
-                        touch = *it;
-                        if (touch->id == event.tfinger.fingerId) {
+                        if (it->id == event.tfinger.fingerId) {
                             if (event.type == SDL_FINGERMOTION) {
-                                touch->x = event.tfinger.x;
-                                touch->y = event.tfinger.y;
-                                printf("finger move: (%.2f, %.2f)\n", touch->x, touch->y);
+                                it->x = event.tfinger.x;
+                                it->y = event.tfinger.y;
+                                printf("finger move: (%.2f, %.2f)\n", it->x, it->y);
                             } else {
-                                printf("Finger up: (%.2f, %.2f)\n", touch->x, touch->y);
+                                printf("Finger up: (%.2f, %.2f)\n", it->x, it->y);
                                 m_touches.erase(it);
                             }
                             break;

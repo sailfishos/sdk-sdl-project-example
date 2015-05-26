@@ -32,7 +32,7 @@
 #include <SDL.h>
 #include <stdio.h>
 
-#include <list>
+#include <vector>
 
 class TouchPoint {
     public:
@@ -43,7 +43,7 @@ class TouchPoint {
         float y;
 };
 
-typedef void (*touch_point_func)(TouchPoint *touch, void *user_data);
+typedef void (*touch_point_func)(const TouchPoint &touch, void *user_data);
 
 class SDL2TestApplication {
     public:
@@ -56,7 +56,7 @@ class SDL2TestApplication {
         virtual void resizeGL(int width, int height) = 0;
         virtual void renderGL() = 0;
 
-        virtual void onPressed(TouchPoint *touch) {}
+        virtual void onPressed(const TouchPoint &touch) {}
 
         void for_each_touch(touch_point_func f, void *user_data);
 
@@ -65,7 +65,7 @@ class SDL2TestApplication {
         int m_minor;
         SDL_Window *m_window;
         SDL_GLContext m_gl_context;
-        std::list<TouchPoint*> m_touches;
+        std::vector<TouchPoint> m_touches;
 };
 
 #endif /* SAILFISH_SDL_WAYLAND_OPENGL_TEST_H */
