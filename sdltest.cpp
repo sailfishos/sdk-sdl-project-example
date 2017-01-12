@@ -146,9 +146,9 @@ SDL2TestApplicationGLESv2::resizeGL(int width, int height)
 
     // Transposed
     float projection[] = {
-        2.0 / (right - left), 0.0, 0.0, 0.0,
-        0.0, 2.0 / (top - bottom), 0.0, 0.0,
-        0.0, 0.0, -2.0 / (farVal - nearVal), 0.0,
+        float(2.0 / (right - left)), 0.0, 0.0, 0.0,
+        0.0, float(2.0 / (top - bottom)), 0.0, 0.0,
+        0.0, 0.0, float(-2.0 / (farVal - nearVal)), 0.0,
         tx, ty, tz, 1.0,
     };
 

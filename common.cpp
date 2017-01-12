@@ -58,7 +58,7 @@ SDL2TestApplication::run()
     m_window = SDL_CreateWindow("SDL2TestApplication",
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED, 
-            540, 960,
+            0, 0, // size shouldn't matter with fullscreen mode
             SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
 
     if (m_window == NULL) {
