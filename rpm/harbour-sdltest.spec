@@ -14,6 +14,9 @@ BuildRequires: pkgconfig(SDL2_image)
 BuildRequires: pkgconfig(SDL2_ttf)
 BuildRequires: pkgconfig(SDL2_mixer)
 
+%{!?qtc_qmake5:%define qtc_qmake5 %{qmake5}}
+%{!?qtc_make:%define qtc_make make}
+
 %description
 Short description of my SailfishOS Application
 
@@ -23,8 +26,9 @@ Short description of my SailfishOS Application
 #%configure
 
 %build
-# Command used to compile the application
-make
+
+%{qtc_qmake5}
+%{qtc_make}
 
 %install
 rm -rf %{buildroot}
